@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
-    <HelloTs />
+    <HelloTs msg="ts特性" @add="handleAddFeature"/>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 // import HelloWorld from './components/HelloWorld.vue';
 import HelloTs from './components/HelloTs.vue';
+import { Feature } from './components/HelloTs.vue';
 
 @Component({
   components: {
@@ -17,7 +18,11 @@ import HelloTs from './components/HelloTs.vue';
     HelloTs,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  private handleAddFeature(feature: Feature) {
+    console.log(feature);
+  }
+}
 </script>
 
 <style>

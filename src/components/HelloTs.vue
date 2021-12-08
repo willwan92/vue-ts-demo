@@ -1,19 +1,20 @@
 <template>
   <div>
+      <h1>{{ msg }}</h1>
       <input type="text" @keydown.enter="handleInputFeature">
       <ul>
           <li v-for="item in features" :key="item.id">{{ item.name }}</li>
       </ul>
 
-      <p>属性总数：{{ count }}</p>
+      <p>特性总数：{{ count }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, Emit  } from 'vue-property-decorator';
 
 // 接口定义数据结构
-interface Feature {
+export interface Feature {
     id: number;
     name: string;
 }
@@ -24,13 +25,24 @@ interface Result<T> {
     data: T[];
 }
 
+// 类装饰器（装饰器实际上就是一个工厂函数，传入一个对象，输出处理后的新对象）
 @Component
 export default class HelloTs extends Vue { // 基于类的组件
+    // 属性装饰器（定义props）
+    @Prop({ required: true, type: String })
+    private msg!: string; // 感叹号“!”是明确赋值断言，意思是一定会传值的
+
     private features: Feature[];
 
     constructor() {
         super();
         this.features = [];
+    }
+
+    // 函数装饰器（实现wather）
+    @Watch('features', { deep: true })
+    onFeaturesChange(val: Feature[], oldValue: Feature[]) {
+        console.log(val, oldValue);
     }
 
     // 生命周期函数
@@ -57,6 +69,8 @@ export default class HelloTs extends Vue { // 基于类的组件
         return Promise.resolve<Result<T>>({ ok: 1, data });
     }
 
+    // 函数装饰器（向父组件触发add事件）
+    @Emit('add')
     public addFeatures(feature: Feature) {
         this.features.push(feature);
     }
