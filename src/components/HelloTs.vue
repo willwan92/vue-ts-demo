@@ -12,6 +12,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch, Emit  } from 'vue-property-decorator';
+import { State, Action, Mutation } from 'vuex-class';
 
 // 接口定义数据结构
 export interface Feature {
@@ -32,11 +33,16 @@ export default class HelloTs extends Vue { // 基于类的组件
     @Prop({ required: true, type: String })
     private msg!: string; // 感叹号“!”是明确赋值断言，意思是一定会传值的
 
-    private features: Feature[];
+    // private features: Feature[];
+    // 状态、变更、动作映射
+    @State features!: Feature[];
+    @Mutation addFeatureMuation: any;
+    @Action addFeatureAction: any;
+
 
     constructor() {
         super();
-        this.features = [];
+        // this.features = [];
     }
 
     // 函数装饰器（实现wather）
@@ -48,8 +54,8 @@ export default class HelloTs extends Vue { // 基于类的组件
     // 生命周期函数
     public async created() {
         // console.log('created');
-        const result = await this.getData<Feature>()
-        this.features = result.data;
+        // const result = await this.getData<Feature>()
+        // this.features = result.data;
     }
 
     // 定义泛型函数，返回promise
@@ -76,10 +82,11 @@ export default class HelloTs extends Vue { // 基于类的组件
     }
 
     public handleInputFeature(event: any) {
-        this.addFeatures({
-            id: Date.now(),
-            name: event.target.value,
-        });
+        // this.addFeatures({
+        //     id: Date.now(),
+        //     name: event.target.value,
+        // });
+        this.addFeatureAction(event.target.value);
         event.target.value = '';
     }
 
